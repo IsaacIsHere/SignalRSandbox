@@ -47,5 +47,9 @@ namespace SignalLines.Common
             }
         }
     
+        public GamePiece GetElementAt(int row, int column)
+        {
+            return _grid[row, column];
+        }
     }
 }

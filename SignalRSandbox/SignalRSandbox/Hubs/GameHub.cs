@@ -1,5 +1,6 @@
 using System;
 using SignalLines.Common;
+using SignalLines.Common.GamePieces;
 using SignalR.Hubs;
 
 namespace SignalRSandbox.Hubs
@@ -7,7 +8,7 @@ namespace SignalRSandbox.Hubs
     [HubName("GameHub")]
     public class GameHub : Hub
     {
-        private GameModel _gameModel;
+        private readonly GameModel _gameModel;
         private const int Height = 3;
         private const int Width = 3;
 
@@ -22,17 +23,24 @@ namespace SignalRSandbox.Hubs
             Clients.addMessage(message);
         }
 
-        public Tuple<int, int> GameSize()
+        public GameModel JoinGame()
         {
-            return new Tuple<int, int>(Height, Width);
+            
+            return _gameModel;
         }
 
         public void ClickLine(int row, int column)
         {
-            // Click the line
+            const int playerId = 1;
 
-            // Tell everyone that the line was clicked
-            Clients.lineClicked(row, column);
+            // Click the line
+            var item = _gameModel.GetElementAt(row, column) as Line;
+
+            if (item != null && item.Occupy(playerId))
+            {
+                // Tell everyone that the line was clicked
+                Clients.lineClicked(row, column, playerId);
+            }
         }
     }
 }

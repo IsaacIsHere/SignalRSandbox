@@ -1,4 +1,5 @@
 ﻿using System;
+using SignalLines.Common;
 using SignalR.Client.Hubs;
 
 namespace SignalLines
@@ -22,9 +23,9 @@ namespace SignalLines
             hub.Start().Wait();
         }
 
-        public Tuple<int, int> GetSize()
+        public GameModel JoinGame()
         {
-            var task = _chat.Invoke<Tuple<int, int>>("GameSize");
+            var task = _chat.Invoke<GameModel>("JoinGame");
             task.Wait();
             var result = task.Result;
             return result;

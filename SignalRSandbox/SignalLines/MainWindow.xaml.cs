@@ -27,11 +27,10 @@ namespace SignalLines
         {
             //MessagesReceived.Text += messageReceivedEventArgs.Message;
         }
-        
+
         private void CreateWorld()
         {
-            var size = _connectionManager.GetSize();
-            _model = new GameModel(size.Item1, size.Item2);
+            _model = _connectionManager.JoinGame();
 
             _gameGrid = new Grid();
 
@@ -56,24 +55,26 @@ namespace SignalLines
         {
             if (piece is Dot)
             {
-                var item = new Grid {Style = (Style) Resources["DotStyle"]};
+                var item = new Grid { Style = (Style)Resources["DotStyle"] };
                 return item;
             }
 
             if (piece is Line)
             {
+                var line = piece as Line;
+
                 var button = new Button { Style = (Style)Resources["LineStyle"] };
                 button.Click += LineClicked;
                 return button;
             }
 
-            var square= new Grid { Style = (Style)Resources["SquareStyle"] };
+            var square = new Grid { Style = (Style)Resources["SquareStyle"] };
             return square;
         }
 
         private void LineClicked(object sender, RoutedEventArgs e)
         {
-            
+
         }
 
         private void SetColumnsDefinitions()
@@ -82,17 +83,17 @@ namespace SignalLines
             {
                 if (i.IsEven())
                 {
-                    _gameGrid.ColumnDefinitions.Add(new ColumnDefinition()
-                                                       {
-                                                           Width = new GridLength(1, GridUnitType.Star)
-                                                       });
+                    _gameGrid.ColumnDefinitions.Add(new ColumnDefinition
+                                                        {
+                                                            Width = new GridLength(1, GridUnitType.Star)
+                                                        });
                 }
                 else
                 {
-                    _gameGrid.ColumnDefinitions.Add(new ColumnDefinition()
-                                                       {
-                                                           Width = new GridLength(8, GridUnitType.Star)
-                                                       });
+                    _gameGrid.ColumnDefinitions.Add(new ColumnDefinition
+                                                        {
+                                                            Width = new GridLength(8, GridUnitType.Star)
+                                                        });
                 }
             }
         }
