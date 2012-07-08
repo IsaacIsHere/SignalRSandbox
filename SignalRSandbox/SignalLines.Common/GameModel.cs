@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using SignalLines.Common.GamePieces;
 
@@ -11,7 +10,6 @@ namespace SignalLines.Common
         public int NumRows { get; private set; }
         public int NumColumns { get; private set; }
         private readonly GamePiece[,] _grid;
-        public List<Tuple<int,int>> LinesOccupied = new List<Tuple<int, int>>(); 
 
         public GameModel(int height, int width)
         {
@@ -46,7 +44,9 @@ namespace SignalLines.Common
 
         public IEnumerable<GamePiece> GetAllElements()
         {
+            // ReSharper disable LoopCanBeConvertedToQuery
             foreach (var piece in _grid)
+            // ReSharper restore LoopCanBeConvertedToQuery
             {
                 if (piece != null)
                     yield return piece;

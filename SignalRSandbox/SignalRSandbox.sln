@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRSandbox", "SignalRSandbox\SignalRSandbox.csproj", "{C06D551C-8B16-4153-8DCA-E5C24F8C975F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalLines", "SignalLines\SignalLines.csproj", "{0360FFA0-2850-4E94-AFD7-1E8DDA5465EC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C06D551C-8B16-4153-8DCA-E5C24F8C975F} = {C06D551C-8B16-4153-8DCA-E5C24F8C975F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalLines.Common", "SignalLines.Common\SignalLines.Common.csproj", "{2EED0985-818E-47E5-BEF1-84554436D01B}"
 EndProject

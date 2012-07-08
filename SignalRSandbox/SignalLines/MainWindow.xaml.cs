@@ -56,10 +56,14 @@ namespace SignalLines
 
         private Button FindButton(int row, int column)
         {
-            return _lineButtons
-                .Select(x => new { Button = x, Line = x.Tag as Line })
-                .FirstOrDefault(x => x.Line.Row == row && x.Line.Column == column)
-                .Button;
+            var firstOrDefault = _lineButtons
+                .Select(x => new {Button = x, Line = x.Tag as Line})
+                .FirstOrDefault(x => x.Line.Row == row && x.Line.Column == column);
+
+            if (firstOrDefault != null)
+                return firstOrDefault
+                    .Button;
+            return null;
         }
 
         private void ConnectionManagerOnMessageReceived(object sender, MessageReceivedEventArgs messageReceivedEventArgs)
@@ -69,7 +73,8 @@ namespace SignalLines
 
         private void CreateWorld()
         {
-            _model = _connectionManager.JoinGame();
+            var state = _connectionManager.JoinGame();
+            _model = new GameModel(state.Size.Item1, state.Size.Item2);
 
             _gameGrid = new Grid();
             _lineButtons = new List<Button>();
@@ -98,7 +103,7 @@ namespace SignalLines
             foreach (var button in _lineButtons)
                 SetPieceColor(button);
 
-            foreach (var tuple in _model.LinesOccupied)
+            foreach (var tuple in state.OccupiedLines)
             {
                 var line = _model.GetElementAt(tuple.Item1, tuple.Item2) as Line;
                 if (line != null) line.Occupy(1);

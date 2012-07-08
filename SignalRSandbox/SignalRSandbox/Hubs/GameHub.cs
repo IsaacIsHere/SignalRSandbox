@@ -23,23 +23,21 @@ namespace SignalRSandbox.Hubs
             Clients.addMessage(message);
         }
 
-        public GameModel JoinGame()
+        public GameState JoinGame()
         {
-            var model = _world.GameModel;
-            return model;
+            var state = _world.State;
+            return state;
         }
 
         public void ClickLine(int row, int column)
         {
             const int playerId = 1;
 
-            // Click the line
             var item = _world.GameModel.GetElementAt(row, column) as Line;
 
             if (item != null && item.Occupy(playerId))
             {
-                _world.GameModel.LinesOccupied.Add(new Tuple<int, int>(row, column));
-                // Tell everyone that the line was clicked
+                _world.State.OccupiedLines.Add(new Tuple<int, int>(row, column));
                 Clients.lineClicked(row, column, playerId);
             }
         }

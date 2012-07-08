@@ -25,9 +25,9 @@ namespace SignalLines
             hub.Start().Wait();
         }
 
-        public GameModel JoinGame()
+        public GameState JoinGame()
         {
-            var task = _chat.Invoke<GameModel>("JoinGame");
+            var task = _chat.Invoke<GameState>("JoinGame");
             task.Wait();
             var result = task.Result;
             return result;

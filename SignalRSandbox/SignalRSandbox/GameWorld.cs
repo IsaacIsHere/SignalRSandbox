@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SignalLines.Common;
 
 namespace SignalRSandbox
@@ -11,6 +12,7 @@ namespace SignalRSandbox
         private int _nextId = 1;
         private readonly GameModel _gameModel;
         private readonly List<Player> _players;
+        private readonly GameState _state = new GameState { Size = new Tuple<int, int>(Height, Width) };
 
         private static GameWorld _instance;
 
@@ -18,6 +20,8 @@ namespace SignalRSandbox
         {
             get { return _gameModel; }
         }
+
+        public GameState State { get { return _state; } }
 
         public List<Player> Players
         {
