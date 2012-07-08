@@ -8,9 +8,12 @@ namespace SignalRSandbox.Hubs
     public class GameHub : Hub
     {
         private GameModel _gameModel;
+        private const int Height = 3;
+        private const int Width = 3;
+
         public GameHub()
         {
-            //_gameModel = new GameModel();
+            _gameModel = new GameModel(Height, Width);
         }
 
         public void Send(string message)
@@ -21,7 +24,7 @@ namespace SignalRSandbox.Hubs
 
         public Tuple<int, int> GameSize()
         {
-            return new Tuple<int, int>(8, 9);
+            return new Tuple<int, int>(Height, Width);
         }
 
         public void ClickLine(int row, int column)
@@ -29,6 +32,7 @@ namespace SignalRSandbox.Hubs
             // Click the line
 
             // Tell everyone that the line was clicked
+            Clients.lineClicked(row, column);
         }
     }
 }
