@@ -1,0 +1,5 @@
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines.Common\bin\Debug\SignalLines.Common.dll
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines.Common\bin\Debug\SignalLines.Common.pdb
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines.Common\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines.Common\obj\Debug\SignalLines.Common.dll
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines.Common\obj\Debug\SignalLines.Common.pdb

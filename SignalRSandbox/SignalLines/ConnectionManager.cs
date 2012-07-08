@@ -16,10 +16,18 @@ namespace SignalLines
 
             var hub = new HubConnection("http://localhost:5317");
             
-            _chat = hub.CreateProxy("chat");
+            _chat = hub.CreateProxy("GameHub");
             _chat.On("addMessage", ProcessMessage);
 
             hub.Start().Wait();
+        }
+
+        public Tuple<int, int> GetSize()
+        {
+            var task = _chat.Invoke<Tuple<int, int>>("GameSize");
+            task.Wait();
+            var result = task.Result;
+            return result;
         }
 
         private void ProcessMessage(dynamic message)

@@ -1,3 +1,6 @@
 <Modules>
   <Module PersistentId="0360FFA0-2850-4E94-AFD7-1E8DDA5465EC" ModuleId="SignalLines" />
+  <Module PersistentId="C06D551C-8B16-4153-8DCA-E5C24F8C975F" ModuleId="SignalRSandbox" />
+  <Module PersistentId="PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" ModuleId="PresentationFramework" />
+  <Module PersistentId="2EED0985-818E-47E5-BEF1-84554436D01B" ModuleId="SignalLines.Common" />
 </Modules>
