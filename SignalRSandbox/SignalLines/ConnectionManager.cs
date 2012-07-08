@@ -10,6 +10,7 @@ namespace SignalLines
         private readonly IHubProxy _chat;
 
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
+        public event EventHandler<LineClickedEventArgs> LineClicked;
 
         public ConnectionManager(IDispatcher dispatcher)
         {
@@ -19,6 +20,7 @@ namespace SignalLines
             
             _chat = hub.CreateProxy("GameHub");
             _chat.On("addMessage", ProcessMessage);
+            _chat.On<int, int, int>("lineClicked", HandleLineClicked);
 
             hub.Start().Wait();
         }
@@ -43,6 +45,20 @@ namespace SignalLines
         {
             _chat.Invoke("Send", message);
         }
+
+        public void HandleLineClicked(int row, int column, int playerId)
+        {
+            if (LineClicked != null)
+            {
+                _dispatcher.Dispatch(() => LineClicked(this, new LineClickedEventArgs(row, column, playerId)));
+            }
+        }
+
+        public void ClickLine(int row, int column)
+        {
+            var task = _chat.Invoke("ClickLine", row, column);
+            task.Wait();
+        }
     }
 
     public class MessageReceivedEventArgs : EventArgs
@@ -57,6 +73,20 @@ namespace SignalLines
         public dynamic Message
         {
             get { return _message; }
+        }
+    }
+
+    public class LineClickedEventArgs : EventArgs
+    {
+        public int Row { get; private set; }
+        public int Column { get; private set; }
+        public int PlayerId { get; private set; }
+
+        public LineClickedEventArgs(int row, int column, int playerId)
+        {
+            Row = row;
+            Column = column;
+            PlayerId = playerId;
         }
     }
 }

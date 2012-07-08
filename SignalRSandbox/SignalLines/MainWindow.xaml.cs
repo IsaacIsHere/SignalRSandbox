@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Media;
 using SignalLines.Common;
 using SignalLines.Common.GamePieces;
 
@@ -19,8 +22,15 @@ namespace SignalLines
 
             _connectionManager = new ConnectionManager(new WpfDispatcher());
             _connectionManager.MessageReceived += ConnectionManagerOnMessageReceived;
+            _connectionManager.LineClicked += ConnectionManagerOnLineClicked;
 
             CreateWorld();
+        }
+
+        private void ConnectionManagerOnLineClicked(object sender, LineClickedEventArgs e)
+        {
+            var piece = _model.GetElementAt(e.Row, e.Column) as Line;
+            if (piece != null) piece.Occupy(e.PlayerId);
         }
 
         private void ConnectionManagerOnMessageReceived(object sender, MessageReceivedEventArgs messageReceivedEventArgs)
@@ -63,7 +73,14 @@ namespace SignalLines
             {
                 var line = piece as Line;
 
-                var button = new Button { Style = (Style)Resources["LineStyle"] };
+                var button = new Button
+                                 {
+                                     Style = (Style)Resources["LineStyle"],
+                                     Background = Brushes.Goldenrod
+                                 };
+                // Bind tag's PlayerId
+                button.DataContext = piece;
+                
                 button.Click += LineClicked;
                 return button;
             }
@@ -74,12 +91,17 @@ namespace SignalLines
 
         private void LineClicked(object sender, RoutedEventArgs e)
         {
-
+            var button = sender as Button;
+            if (button != null)
+            {
+                var piece = button.Tag as Line;
+                if (piece != null) _connectionManager.ClickLine(piece.Row, piece.Column);
+            }
         }
 
         private void SetColumnsDefinitions()
         {
-            for (var i = 0; i < _model.Width; i++)
+            for (var i = 0; i < _model.NumColumns; i++)
             {
                 if (i.IsEven())
                 {
@@ -100,7 +122,7 @@ namespace SignalLines
 
         private void SetRowDefinitions()
         {
-            for (var i = 0; i < _model.Height; i++)
+            for (var i = 0; i < _model.NumRows; i++)
             {
                 if (i.IsEven())
                 {

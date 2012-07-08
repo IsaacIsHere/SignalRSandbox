@@ -70,12 +70,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ConnectionManager.cs" />
+    <Compile Include="Converters\PlayerToColorConverter.cs" />
     <Compile Include="IDispatcher.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Converters.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
