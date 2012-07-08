@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,6 +16,7 @@ namespace SignalLines
         private readonly ConnectionManager _connectionManager;
         private GameModel _model;
         private Grid _gameGrid;
+        private IList<Button> _lineButtons;
 
         public MainWindow()
         {
@@ -30,7 +32,37 @@ namespace SignalLines
         private void ConnectionManagerOnLineClicked(object sender, LineClickedEventArgs e)
         {
             var piece = _model.GetElementAt(e.Row, e.Column) as Line;
-            if (piece != null) piece.Occupy(e.PlayerId);
+            if (piece != null)
+            {
+                piece.Occupy(e.PlayerId);
+                var button = FindButton(e.Row, e.Column);
+                SetPieceColor(button);
+            }
+        }
+
+        private void SetPieceColor(Button button)
+        {
+            var line = button.Tag as Line;
+            if (line != null)
+            {
+                switch (line.PlayerId)
+                {
+                    case 0:
+                        button.Background = Brushes.GreenYellow;
+                        break;
+                    default:
+                        button.Background = Brushes.MediumBlue;
+                        break;
+                }
+            }
+        }
+
+        private Button FindButton(int row, int column)
+        {
+            return _lineButtons
+                .Select(x => new { Button = x, Line = x.Tag as Line })
+                .FirstOrDefault(x => x.Line.Row == row && x.Line.Column == column)
+                .Button;
         }
 
         private void ConnectionManagerOnMessageReceived(object sender, MessageReceivedEventArgs messageReceivedEventArgs)
@@ -43,6 +75,7 @@ namespace SignalLines
             _model = _connectionManager.JoinGame();
 
             _gameGrid = new Grid();
+            _lineButtons = new List<Button>();
 
             SetRowDefinitions();
             SetColumnsDefinitions();
@@ -56,9 +89,17 @@ namespace SignalLines
                 element.SetValue(Grid.ColumnProperty, piece.Column);
                 element.Tag = piece;
                 _gameGrid.Children.Add(element);
+
+                if (element is Button)
+                {
+                    _lineButtons.Add(element as Button);
+                }
             }
 
             Board.Children.Add(_gameGrid);
+
+            foreach (var button in _lineButtons)
+                SetPieceColor(button);
         }
 
         private FrameworkElement GetElementForPiece(GamePiece piece)

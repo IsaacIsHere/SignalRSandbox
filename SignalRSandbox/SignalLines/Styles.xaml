@@ -16,12 +16,12 @@
     <Style x:Key="LineStyle" TargetType="Button">
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
-        <Setter Property="Background">
+        <!--<Setter Property="Background">
             <Setter.Value>
                 <Binding Path="." Converter="{StaticResource PlayerToColorConverter}">                    
                 </Binding>
             </Setter.Value>
-        </Setter>
+        </Setter>-->
     </Style>
 
 </ResourceDictionary>
