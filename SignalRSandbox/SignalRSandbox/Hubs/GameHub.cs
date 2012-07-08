@@ -25,7 +25,8 @@ namespace SignalRSandbox.Hubs
 
         public GameModel JoinGame()
         {
-            return _world.GameModel;
+            var model = _world.GameModel;
+            return model;
         }
 
         public void ClickLine(int row, int column)
