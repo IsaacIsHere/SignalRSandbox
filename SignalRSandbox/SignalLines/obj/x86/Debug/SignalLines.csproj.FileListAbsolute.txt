@@ -1,0 +1,17 @@
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\bin\Debug\SignalLines.exe
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\bin\Debug\SignalLines.pdb
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\bin\Debug\SignalR.Client.dll
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\bin\Debug\SignalR.Client.xml
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\MainWindow.baml
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\MainWindow.g.cs
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\App.g.cs
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\SignalLines_MarkupCompile.cache
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\SignalLines.g.resources
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\SignalLines.Properties.Resources.resources
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\GenerateResource.read.1.tlog
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\GenerateResource.write.1.tlog
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\SignalLines.exe
+C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\SignalLines.pdb
