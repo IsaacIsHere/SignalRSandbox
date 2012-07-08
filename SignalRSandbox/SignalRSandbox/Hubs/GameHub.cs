@@ -34,10 +34,11 @@ namespace SignalRSandbox.Hubs
             const int playerId = 1;
 
             // Click the line
-            var item = _world.GameModel.GetElementAt(row, column);
+            var item = _world.GameModel.GetElementAt(row, column) as Line;
 
-            if (item != null && ((Line)item).Occupy(playerId))
+            if (item != null && item.Occupy(playerId))
             {
+                _world.GameModel.LinesOccupied.Add(new Tuple<int, int>(row, column));
                 // Tell everyone that the line was clicked
                 Clients.lineClicked(row, column, playerId);
             }
@@ -51,7 +52,8 @@ namespace SignalRSandbox.Hubs
 
         public Task Reconnect(IEnumerable<string> groups)
         {
-            throw new NotImplementedException();
+            _world.Join(Context.ConnectionId);
+            return null;
         }
     }
 }

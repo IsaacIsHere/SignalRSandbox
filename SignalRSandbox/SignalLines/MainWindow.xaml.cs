@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 using SignalLines.Common;
 using SignalLines.Common.GamePieces;
 
 namespace SignalLines
 {
-
     public partial class MainWindow
     {
         private readonly ConnectionManager _connectionManager;
@@ -48,7 +45,7 @@ namespace SignalLines
                 switch (line.PlayerId)
                 {
                     case 0:
-                        button.Background = Brushes.GreenYellow;
+                        button.Background = Brushes.Transparent;
                         break;
                     default:
                         button.Background = Brushes.MediumBlue;
@@ -100,33 +97,38 @@ namespace SignalLines
 
             foreach (var button in _lineButtons)
                 SetPieceColor(button);
+
+            foreach (var tuple in _model.LinesOccupied)
+            {
+                var line = _model.GetElementAt(tuple.Item1, tuple.Item2) as Line;
+                if (line != null) line.Occupy(1);
+                var button = FindButton(tuple.Item1, tuple.Item2);
+                SetPieceColor(button);
+            }
         }
 
         private FrameworkElement GetElementForPiece(GamePiece piece)
         {
             if (piece is Dot)
             {
-                var item = new Grid { Style = (Style)Resources["DotStyle"] };
+                var item = new Grid { Style = (Style)Application.Current.FindResource("DotStyle")};
                 return item;
             }
 
             if (piece is Line)
             {
-                var line = piece as Line;
-
                 var button = new Button
                                  {
-                                     Style = (Style)Resources["LineStyle"],
-                                     Background = Brushes.Goldenrod
+                                     Style = (Style)Application.Current.FindResource("LineStyle"),
+                                     DataContext = piece
                                  };
                 // Bind tag's PlayerId
-                button.DataContext = piece;
-                
+
                 button.Click += LineClicked;
                 return button;
             }
 
-            var square = new Grid { Style = (Style)Resources["SquareStyle"] };
+            var square = new Grid { Style = (Style)Application.Current.FindResource("SquareStyle") };
             return square;
         }
 

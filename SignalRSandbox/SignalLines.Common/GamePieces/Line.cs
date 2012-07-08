@@ -15,10 +15,15 @@ namespace SignalLines.Common.GamePieces
             set
             {
                 _playerId = value;
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs("PlayerId"));
-                }
+                RaisePropertyChanged("PlayerId");
+            }
+        }
+
+        private void RaisePropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 
