@@ -99,6 +99,9 @@ namespace SignalLines
                     case 7:
                         button.Background = Brushes.Pink;
                         break;
+                    default:
+                        button.Background = Brushes.Black;
+                        break;
                 }
             }
         }
