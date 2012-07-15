@@ -17,7 +17,7 @@ namespace SignalLines
         {
             _dispatcher = dispatcher;
 
-            var hub = new HubConnection("http://localhost:5317");
+            var hub = new HubConnection("http://signallines.apphb.com/");
             
             _chat = hub.CreateProxy("GameHub");
             _chat.On("addMessage", ProcessMessage);

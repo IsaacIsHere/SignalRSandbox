@@ -5,27 +5,27 @@
 <script src="@Url.Content("~/Scripts/jquery.signalR-0.5.2.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/signalr/hubs")" type="text/javascript"></script>
 <script type="text/javascript">
-//    $(function () {
-//        // Proxy created on the fly
-//        var chat = $.connection.chat;
+    $(function () {
+        // Proxy created on the fly
+        var chat = $.connection.gameHub;
 
-//        if (chat == undefined) {
-//            alert("chat object is undefined");
-//        }
+        if (chat == undefined) {
+            alert("chat object is undefined");
+        }
 
-//        // Declare a function on the chat hub so the server can invoke it
-//        chat.addMessage = function (message) {
-//            $('#messages').append('<li>' + message + '</li>');
-//        };
+        // Declare a function on the chat hub so the server can invoke it
+        chat.addMessage = function (message) {
+            $('#messages').append('<li>' + message + '</li>');
+        };
 
-//        $("#broadcast").click(function () {
-//            // Call the chat method on the server
-//            chat.send($('#msg').val());
-//        });
+        $("#broadcast").click(function () {
+            // Call the chat method on the server
+            chat.send($('#msg').val());
+        });
 
-//        // Start the connection
-//        $.connection.hub.start();
-//    });
+        // Start the connection
+        $.connection.hub.start();
+    });
 </script>
 <input type="text" id="msg" />
 <input type="button" id="broadcast" value="broadcast" />
