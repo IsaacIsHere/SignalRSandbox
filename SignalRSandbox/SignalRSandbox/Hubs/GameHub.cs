@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using SignalLines.Common;
 using SignalLines.Common.GamePieces;
@@ -19,8 +20,13 @@ namespace SignalRSandbox.Hubs
 
         public void Send(string message)
         {
-            // Call the addMessage method on all clients
-            Clients.addMessage(message);
+            var player = _world.State.Players.FirstOrDefault(p => p.ConnectionId == Context.ConnectionId);
+            if (player != null)
+            {
+                var playerId = player.PlayerId;
+                // Call the addMessage method on all clients
+                Clients.addMessage("Player" + playerId + ": " + message);
+            }
         }
 
         public GameState JoinGame()
@@ -31,26 +37,31 @@ namespace SignalRSandbox.Hubs
 
         public void ClickLine(int row, int column)
         {
-            const int playerId = 1;
+            var playerId = _world.State.Players.First(p => p.ConnectionId == Context.ConnectionId).PlayerId;
 
             var item = _world.GameModel.GetElementAt(row, column) as Line;
 
             if (item != null && item.Occupy(playerId))
             {
-                _world.State.OccupiedLines.Add(new Tuple<int, int>(row, column));
+                _world.State.OccupiedLines.Add(item);
                 Clients.lineClicked(row, column, playerId);
             }
         }
 
         public Task Connect()
         {
-            _world.Join(Context.ConnectionId);
-            return null;
+            return AddPlayerToGame();
         }
 
         public Task Reconnect(IEnumerable<string> groups)
         {
-            _world.Join(Context.ConnectionId);
+            return AddPlayerToGame();
+        }
+
+        private Task AddPlayerToGame()
+        {
+            var playerId = _world.Join(Context.ConnectionId);
+            Clients.newPlayerJoined(playerId);
             return null;
         }
     }

@@ -1,42 +1,33 @@
+using System;
 using System.ComponentModel;
 
 namespace SignalLines.Common.GamePieces
 {
-    public class Line : GamePiece, INotifyPropertyChanged
+    public class Line : GamePiece
     {
         public Line(int row, int column) : base(row, column)
         {
         }
 
-        private int _playerId;
-        public int PlayerId
-        {
-            get { return _playerId; }
-            set
-            {
-                _playerId = value;
-                RaisePropertyChanged("PlayerId");
-            }
-        }
-
-        private void RaisePropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+        public int PlayerId { get; set; }
 
         public bool Occupy(int playerId)
         {
             if (PlayerId == 0)
             {
                 PlayerId = playerId;
+                OnChanged(new EventArgs());
                 return true;
             }
             return false;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnChanged(EventArgs e)
+        {
+            if (Occupied != null)
+                Occupied.Invoke(this, e);
+        }
+
+        public event EventHandler Occupied;
     }
 }

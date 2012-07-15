@@ -11,6 +11,7 @@ namespace SignalLines
 
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
         public event EventHandler<LineClickedEventArgs> LineClicked;
+        public event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
 
         public ConnectionManager(IDispatcher dispatcher)
         {
@@ -21,8 +22,15 @@ namespace SignalLines
             _chat = hub.CreateProxy("GameHub");
             _chat.On("addMessage", ProcessMessage);
             _chat.On<int, int, int>("lineClicked", HandleLineClicked);
+            _chat.On<int>("newPlayerJoined", ProcessNewPlayerJoined);
 
             hub.Start().Wait();
+        }
+
+        private void ProcessNewPlayerJoined(int playerId)
+        {
+            if(PlayerJoined != null)
+                _dispatcher.Dispatch(() => PlayerJoined(this, new PlayerJoinedEventArgs(playerId)));
         }
 
         public GameState JoinGame()
@@ -73,6 +81,16 @@ namespace SignalLines
         public dynamic Message
         {
             get { return _message; }
+        }
+    }
+
+    public class PlayerJoinedEventArgs :EventArgs
+    {
+        public int PlayerId { get; set; }
+
+        public PlayerJoinedEventArgs(int playerId)
+        {
+            PlayerId = playerId;
         }
     }
 

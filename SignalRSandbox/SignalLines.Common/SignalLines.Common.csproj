@@ -46,6 +46,7 @@
     <Compile Include="GamePieces\GamePiece.cs" />
     <Compile Include="GamePieces\Line.cs" />
     <Compile Include="GamePieces\Square.cs" />
+    <Compile Include="GameState.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

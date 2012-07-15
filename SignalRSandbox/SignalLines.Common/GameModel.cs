@@ -31,6 +31,32 @@ namespace SignalLines.Common
                     _grid[i, j] = GetGamePiece(i, j);
                 }
             }
+
+            for (var i = 0; i <= _grid.GetUpperBound(0); i++)
+            {
+                for (var j = 0; j <= _grid.GetUpperBound(1); j++)
+                {
+                    var square = _grid[i, j] as Square;
+                    if (square != null)
+                    {
+                        // left
+                        var left = _grid[square.Row, square.Column - 1] as Line;
+                        square.SetLine(left, "Left");
+
+                        // right
+                        var right = _grid[square.Row, square.Column + 1] as Line;
+                        square.SetLine(right, "Right");
+
+                        // top
+                        var top = _grid[square.Row - 1, square.Column] as Line;
+                        square.SetLine(top, "Top");
+
+                        // bottom
+                        var bottom = _grid[square.Row + 1, square.Column] as Line;
+                        square.SetLine(bottom, "Bottom");
+                    }
+                }
+            }
         }
 
         private GamePiece GetGamePiece(int row, int column)
