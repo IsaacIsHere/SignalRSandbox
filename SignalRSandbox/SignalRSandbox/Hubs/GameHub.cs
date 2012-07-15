@@ -11,7 +11,7 @@ namespace SignalRSandbox.Hubs
     [HubName("GameHub")]
     public class GameHub : Hub, IConnected
     {
-        private readonly GameWorld _world;
+        private GameWorld _world;
 
         public GameHub()
         {
@@ -63,6 +63,13 @@ namespace SignalRSandbox.Hubs
             var playerId = _world.Join(Context.ConnectionId);
             Clients.newPlayerJoined(playerId);
             return null;
+        }
+
+        public void ResetGame()
+        {
+            _world.StartNewGame();
+
+            Clients.resetGame(_world.State);
         }
     }
 }

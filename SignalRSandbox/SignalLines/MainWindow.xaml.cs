@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -28,8 +29,15 @@ namespace SignalLines
             _connectionManager.MessageReceived += ConnectionManagerOnMessageReceived;
             _connectionManager.LineClicked += ConnectionManagerOnLineClicked;
             _connectionManager.PlayerJoined += ConnectionManagerOnPlayerJoined;
+            _connectionManager.GameReset += ConnectionManagerOnGameReset;
 
-            CreateWorld();
+            var state = _connectionManager.JoinGame();
+            CreateWorld(state);
+        }
+
+        private void ConnectionManagerOnGameReset(object sender, GameResetEventArgs gameResetEventArgs)
+        {
+            CreateWorld(gameResetEventArgs.GameState);
         }
 
         private void ConnectionManagerOnPlayerJoined(object sender, PlayerJoinedEventArgs playerJoinedEventArgs)
@@ -114,9 +122,8 @@ namespace SignalLines
             ChatMessages.Text += messageReceivedEventArgs.Message;
         }
 
-        private void CreateWorld()
+        private void CreateWorld(GameState state)
         {
-            var state = _connectionManager.JoinGame();
             _model = new GameModel(state.Size.Item1, state.Size.Item2);
             _players = new ObservableCollection<Player>(state.Players);
             PlayerList.ItemsSource = _players;
@@ -152,6 +159,7 @@ namespace SignalLines
                 }
             }
 
+            Board.Children.Clear();
             Board.Children.Add(_gameGrid);
 
             foreach (var button in _lineButtons)
@@ -309,6 +317,11 @@ namespace SignalLines
                     MessageText.Text = string.Empty;
                 }
             }
+        }
+
+        private void NewGameClicked(object sender, RoutedEventArgs e)
+        {
+            _connectionManager.ResetGame();
         }
     }
 }

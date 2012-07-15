@@ -7,24 +7,32 @@ namespace SignalLines
     public class ConnectionManager
     {
         private readonly IDispatcher _dispatcher;
-        private readonly IHubProxy _chat;
+        private readonly IHubProxy _gameHub;
 
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
         public event EventHandler<LineClickedEventArgs> LineClicked;
         public event EventHandler<PlayerJoinedEventArgs> PlayerJoined;
+        public event EventHandler<GameResetEventArgs> GameReset;
 
         public ConnectionManager(IDispatcher dispatcher)
         {
             _dispatcher = dispatcher;
 
-            var hub = new HubConnection("http://signallines.apphb.com/");
+            var hub = new HubConnection("http://localhost:5317");
             
-            _chat = hub.CreateProxy("GameHub");
-            _chat.On("addMessage", ProcessMessage);
-            _chat.On<int, int, int>("lineClicked", HandleLineClicked);
-            _chat.On<int>("newPlayerJoined", ProcessNewPlayerJoined);
+            _gameHub = hub.CreateProxy("GameHub");
+            _gameHub.On("addMessage", ProcessMessage);
+            _gameHub.On<int, int, int>("lineClicked", HandleLineClicked);
+            _gameHub.On<int>("newPlayerJoined", ProcessNewPlayerJoined);
+            _gameHub.On<GameState>("resetGame", HandleResetGame);
 
             hub.Start().Wait();
+        }
+
+        private void HandleResetGame(GameState gameState)
+        {
+            if (GameReset != null)
+                _dispatcher.Dispatch(() => GameReset(this, new GameResetEventArgs(gameState)));
         }
 
         private void ProcessNewPlayerJoined(int playerId)
@@ -35,7 +43,7 @@ namespace SignalLines
 
         public GameState JoinGame()
         {
-            var task = _chat.Invoke<GameState>("JoinGame");
+            var task = _gameHub.Invoke<GameState>("JoinGame");
             task.Wait();
             var result = task.Result;
             return result;
@@ -51,7 +59,12 @@ namespace SignalLines
 
         public void SendMessage(string message)
         {
-            _chat.Invoke("Send", message);
+            _gameHub.Invoke("Send", message);
+        }
+
+        public void ResetGame()
+        {
+            _gameHub.Invoke("ResetGame");
         }
 
         public void HandleLineClicked(int row, int column, int playerId)
@@ -64,8 +77,18 @@ namespace SignalLines
 
         public void ClickLine(int row, int column)
         {
-            var task = _chat.Invoke("ClickLine", row, column);
+            var task = _gameHub.Invoke("ClickLine", row, column);
             task.Wait();
+        }
+    }
+
+    public class GameResetEventArgs : EventArgs
+    {
+        public GameState GameState { get; set; }
+
+        public GameResetEventArgs(GameState gameState)
+        {
+            GameState = gameState;
         }
     }
 

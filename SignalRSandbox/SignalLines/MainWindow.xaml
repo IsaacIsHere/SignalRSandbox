@@ -101,6 +101,9 @@
                     Content="Send"
                     Click="SendButtonClicked"/>
             </Grid>
+            <Button
+                Content="New Game"
+                Click="NewGameClicked" />
         </Grid>
     </Grid>
 </Window>

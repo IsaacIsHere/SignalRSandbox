@@ -11,8 +11,8 @@ namespace SignalRSandbox
         private const int Width = 3;
 
         private int _nextId = 1;
-        private readonly GameModel _gameModel;
-        private readonly GameState _state = new GameState { Size = new Tuple<int, int>(Height, Width) };
+        private GameModel _gameModel;
+        private GameState _state = new GameState { Size = new Tuple<int, int>(Height, Width) };
 
         private static GameWorld _instance;
 
@@ -44,6 +44,13 @@ namespace SignalRSandbox
             var retVal = _nextId;
             _nextId++;
             return retVal;
+        }
+
+        public void StartNewGame()
+        {
+            _gameModel = new GameModel(Height, Width);
+            var players = _state.Players;
+            _state = new GameState { Size = new Tuple<int, int>(Height, Width), Players = players};
         }
     }
 }
