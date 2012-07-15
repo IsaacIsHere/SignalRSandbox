@@ -19,3 +19,5 @@ C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x
 C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\App.baml
 C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\bin\Debug\SignalLines.Common.dll
 C:\Users\Steven\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\bin\Debug\SignalLines.Common.pdb
+C:\Users\Isaac\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\SignalLines.exe
+C:\Users\Isaac\Documents\GitHub\SignalRSandbox\SignalRSandbox\SignalLines\obj\x86\Debug\SignalLines.pdb
