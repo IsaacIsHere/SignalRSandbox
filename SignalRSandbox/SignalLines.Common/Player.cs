@@ -14,6 +14,8 @@ namespace SignalLines.Common
             RaisePropertyChanged("Score");}
         }
 
+        public string Name { get; set; }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string propertyName)
         {

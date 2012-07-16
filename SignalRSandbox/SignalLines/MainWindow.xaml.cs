@@ -12,7 +12,7 @@ using SignalLines.Common.GamePieces;
 
 namespace SignalLines
 {
-    public partial class MainWindow
+    public partial class MainWindow : INotifyPropertyChanged
     {
         private readonly ConnectionManager _connectionManager;
         private GameModel _model;
@@ -20,6 +20,7 @@ namespace SignalLines
         private IList<Button> _lineButtons;
         private IList<Grid> _squareGrids;
         private ObservableCollection<Player> _players;
+
 
         public MainWindow()
         {
@@ -29,10 +30,18 @@ namespace SignalLines
             _connectionManager.MessageReceived += ConnectionManagerOnMessageReceived;
             _connectionManager.LineClicked += ConnectionManagerOnLineClicked;
             _connectionManager.PlayerJoined += ConnectionManagerOnPlayerJoined;
+            _connectionManager.PlayerLeft += ConnectionManagerOnPlayerLeft;
             _connectionManager.GameReset += ConnectionManagerOnGameReset;
+        }
 
-            var state = _connectionManager.JoinGame();
-            CreateWorld(state);
+        private void ConnectionManagerOnPlayerLeft(object sender, PlayerLeftEventArgs playerLeftEventArgs)
+        {
+            var player = _players.FirstOrDefault(p => p.Name == playerLeftEventArgs.Player.Name);
+            if (player != null)
+            {
+                _players.Remove(player);
+                RaisePropertyChanged("_players");
+            }
         }
 
         private void ConnectionManagerOnGameReset(object sender, GameResetEventArgs gameResetEventArgs)
@@ -40,10 +49,10 @@ namespace SignalLines
             CreateWorld(gameResetEventArgs.GameState);
         }
 
-        private void ConnectionManagerOnPlayerJoined(object sender, PlayerJoinedEventArgs playerJoinedEventArgs)
+        private void ConnectionManagerOnPlayerJoined(object sender, PlayerJoinedEventArgs eventArgs)
         {
-            if (_players.Count(p => p.PlayerId == playerJoinedEventArgs.PlayerId) == 0)
-                _players.Add(new Player { PlayerId = playerJoinedEventArgs.PlayerId, Score = 0 });
+            if (_players.Count(p => p.PlayerId == eventArgs.Player.PlayerId) == 0)
+                _players.Add(eventArgs.Player);
         }
 
         private void ConnectionManagerOnLineClicked(object sender, LineClickedEventArgs e)
@@ -118,7 +127,7 @@ namespace SignalLines
             return null;
         }
 
-        private void ConnectionManagerOnMessageReceived(object sender, MessageReceivedEventArgs messageReceivedEventArgs)
+        private void ConnectionManagerOnMessageReceived(object sender,  MessageReceivedEventArgs messageReceivedEventArgs)
         {
             if (!string.IsNullOrEmpty(ChatMessages.Text))
                 ChatMessages.Text += "\n";
@@ -175,7 +184,7 @@ namespace SignalLines
                 var button = FindButton(occupied.Row, occupied.Column);
                 SetPieceColor(button);
                 var player = GetPlayer(occupied.PlayerId);
-
+                if (player != null) player.Score++;
             }
         }
 
@@ -191,7 +200,7 @@ namespace SignalLines
                 {
                     var player = GetPlayer(eventArgs.PlayerId);
 
-                    player.Score = player.Score + 5;
+                    if (player != null) player.Score = player.Score + 5;
 
                     switch (eventArgs.PlayerId)
                     {
@@ -325,6 +334,30 @@ namespace SignalLines
         private void NewGameClicked(object sender, RoutedEventArgs e)
         {
             _connectionManager.ResetGame();
+        }
+
+        private void JoinGameClicked(object sender, RoutedEventArgs e)
+        {
+            var state = _connectionManager.JoinGame(NameText.Text);
+            if (state != null)
+            {
+                CreateWorld(state);
+                GameView.Visibility = Visibility.Visible;
+                LoginView.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void WindowClosing(object sender, CancelEventArgs e)
+        {
+            _connectionManager.LeaveGame();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void RaisePropertyChanged(string propName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propName));
         }
     }
 }

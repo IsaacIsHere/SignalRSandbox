@@ -23,16 +23,35 @@ namespace SignalRSandbox.Hubs
             var player = _world.State.Players.FirstOrDefault(p => p.ConnectionId == Context.ConnectionId);
             if (player != null)
             {
-                var playerId = player.PlayerId;
                 // Call the addMessage method on all clients
-                Clients.addMessage("Player" + playerId + ": " + message);
+                Clients.addMessage(player.Name + ": " + message);
+            }
+            else
+            {
+                Clients.addMessage("Anon: ");
             }
         }
 
-        public GameState JoinGame()
+        public GameState JoinGame(string playerName)
         {
             var state = _world.State;
-            return state;
+            var player = _world.Join(playerName, Context.ConnectionId);
+            if (player != null)
+            {
+                Clients.newPlayerJoined(player);
+                return state;
+            }
+            return null;
+        }
+
+        public void Leave()
+        {
+            var player = _world.State.Players.FirstOrDefault(p => p.ConnectionId == Context.ConnectionId);
+            if (player != null)
+            {
+                _world.State.Players.Remove(player);
+                Clients.playerLeft(player);
+            }
         }
 
         public void ClickLine(int row, int column)
@@ -50,18 +69,11 @@ namespace SignalRSandbox.Hubs
 
         public Task Connect()
         {
-            return AddPlayerToGame();
+            return null;
         }
 
         public Task Reconnect(IEnumerable<string> groups)
         {
-            return AddPlayerToGame();
-        }
-
-        private Task AddPlayerToGame()
-        {
-            var playerId = _world.Join(Context.ConnectionId);
-            Clients.newPlayerJoined(playerId);
             return null;
         }
 

@@ -33,17 +33,34 @@ namespace SignalRSandbox
             _gameModel = new GameModel(Height, Width);
         }
 
-        public int Join(string connectionId)
+        public Player Join(string playerName, string connectionId)
         {
-            if (State.Players.Count(p => p.ConnectionId == connectionId) == 0)
-                State.Players.Add(new Player
+            if (State.Players.Count(p => p.Name == playerName) != 0)
+            {
+                return null;
+            }
+            var player = new Player
+                             {
+                                 Name = playerName,
+                                 ConnectionId = connectionId,
+                                 PlayerId = _nextId
+                             };
+            State.Players.Add(player);
+            GetNextId();
+            return player;
+        }
+
+        private void GetNextId()
+        {
+            for (var i = 1; i <= 10; i++)
+            {
+                if (State.Players.Count(p => p.PlayerId == i) == 0)
                 {
-                    ConnectionId = connectionId,
-                    PlayerId = _nextId
-                });
-            var retVal = _nextId;
-            _nextId++;
-            return retVal;
+                    _nextId = i;
+                    return;
+                }
+            }
+            _nextId = State.Players.Max(p => p.PlayerId) + 1;
         }
 
         public void StartNewGame()
