@@ -28,7 +28,7 @@ namespace SignalRSandbox.Hubs
             }
             else
             {
-                Clients.addMessage("Anon: ");
+                Clients.addMessage("Anon: " + message);
             }
         }
 
